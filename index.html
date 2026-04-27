@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tripti Tripathi — Compliance & Risk Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --indigo: #4f46e5;
+  --indigo-light: #818cf8;
+  --indigo-dark: #312e81;
+  --pink: #ec4899;
+  --pink-light: #f9a8d4;
+  --cyan: #06b6d4;
+  --cyan-light: #67e8f9;
+  --amber: #f59e0b;
+  --amber-light: #fcd34d;
+  --bg: #080b1a;
+  --bg2: #0d1128;
+  --bg3: #111827;
+  --surface: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: linear-gradient(var(--indigo), var(--pink)); border-radius: 3px; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* NOISE OVERLAY */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* CUSTOM CURSOR */
+#cursor {
+  position: fixed;
+  width: 10px; height: 10px;
+  background: var(--cyan);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+  mix-blend-mode: screen;
+}
+#cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1.5px solid rgba(6,182,212,0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease, width 0.3s, height 0.3s, border-color 0.3s;
+}
+body:hover #cursor { opacity: 1; }
+
+/* LOADING SCREEN */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+#loader.hidden { opacity: 0; visibility: hidden; }
+.loader-initials {
+  font-family: var(--font-display);
+  font-size: 5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--indigo-light), var(--pink), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -2px;
+}
+.loader-bar-wrap {
+  width: 200px;
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.loader-bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--indigo), var(--pink), var(--cyan));
+  border-radius: 2px;
+  animation: loadBar 1.8s ease forwards;
+}
+@keyframes loadBar { to { width: 100%; } }
+.loader-text {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* PARTICLE CANVAS */
+#particle-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* NAVBAR */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 0 2rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(8,11,26,0.7);
+  border-bottom: 1px solid var(--border);
+  transition: all 0.3s;
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.2rem;
+  background: linear-gradient(135deg, var(--indigo-light), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.nav-links {
+  display: flex;
+  gap: 0.25rem;
+  list-style: none;
+}
+.nav-links a {
+  position: relative;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+  font-family: var(--font-body);
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%; right: 50%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--indigo-light), var(--cyan));
+  transition: left 0.3s, right 0.3s;
+  border-radius: 1px;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { left: 0.75rem; right: 0.75rem; }
+
+/* SECTIONS SHARED */
+section {
+  position: relative;
+  z-index: 1;
+  padding: 5rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* HERO */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 6rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.3s forwards;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 32px; height: 1px;
+  background: var(--cyan);
+}
+.hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -2px;
+  margin-bottom: 0.5rem;
+  position: relative;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.5s forwards;
+}
+.shimmer-text {
+  background: linear-gradient(90deg,
+    var(--text) 0%,
+    var(--text) 30%,
+    var(--indigo-light) 45%,
+    var(--cyan-light) 50%,
+    var(--pink-light) 55%,
+    var(--text) 70%,
+    var(--text) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+@keyframes shimmer { to { background-position: 200% center; } }
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  color: var(--muted);
+  font-weight: 300;
+  margin-bottom: 0.75rem;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.7s forwards;
+}
+.hero-subtitle span { color: var(--indigo-light); font-weight: 500; }
+.hero-tagline {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.85s forwards;
+  max-width: 500px;
+  line-height: 1.7;
+}
+.hero-ctas {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 0.7s 1s forwards;
+  margin-bottom: 4rem;
+}
+.btn-primary {
+  padding: 0.75rem 1.75rem;
+  background: linear-gradient(135deg, var(--indigo), var(--pink));
+  color: white;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 8px;
+  cursor: none;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(79,70,229,0.4);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(79,70,229,0.5); }
+.btn-outline {
+  padding: 0.75rem 1.75rem;
+  background: transparent;
+  color: var(--cyan);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.9rem;
+  border: 1.5px solid rgba(6,182,212,0.4);
+  border-radius: 8px;
+  cursor: none;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-outline:hover { background: rgba(6,182,212,0.1); border-color: var(--cyan); }
+
+/* FLOATING STATS CARD */
+.hero-layout {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4rem;
+  align-items: start;
+}
+.hero-content { flex: 1; }
+.floating-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(20px);
+  transform-style: preserve-3d;
+  transition: transform 0.1s;
+  animation: float 6s ease-in-out infinite, fadeIn 1s 1.2s forwards;
+  opacity: 0;
+  min-width: 260px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate3d(1,1,0,2deg); }
+  50% { transform: translateY(-16px) rotate3d(1,1,0,-2deg); }
+}
+@keyframes fadeIn { to { opacity: 1; } }
+.card-title {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+.stat-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.stat-item { display: flex; flex-direction: column; gap: 0.25rem; }
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.stat-num.indigo { color: var(--indigo-light); }
+.stat-num.pink { color: var(--pink); }
+.stat-num.cyan { color: var(--cyan); }
+.stat-num.amber { color: var(--amber); }
+.stat-label { font-size: 0.8rem; color: var(--muted); }
+.card-divider { height: 1px; background: var(--border); margin: 0.75rem 0; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* SECTION HEADERS */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+.section-num {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: var(--pink);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--text);
+}
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* SKILLS */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+.skill-item { margin-bottom: 1.25rem; }
+.skill-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.skill-name { font-size: 0.9rem; font-weight: 500; color: var(--text); }
+.skill-pct { font-size: 0.8rem; color: var(--muted); font-family: var(--font-display); }
+.skill-track {
+  height: 6px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.skill-bar {
+  height: 100%;
+  width: 0;
+  border-radius: 3px;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.bar-indigo { background: linear-gradient(90deg, var(--indigo), var(--indigo-light)); }
+.bar-pink { background: linear-gradient(90deg, var(--pink), var(--pink-light)); }
+.bar-cyan { background: linear-gradient(90deg, var(--cyan), var(--cyan-light)); }
+.bar-amber { background: linear-gradient(90deg, var(--amber), var(--amber-light)); }
+
+.chips-section { margin-top: 1rem; }
+.chips-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.chip {
+  padding: 0.35rem 0.85rem;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid;
+  transition: all 0.2s;
+}
+.chip:hover { transform: translateY(-2px); }
+.chip-indigo { background: rgba(79,70,229,0.12); border-color: rgba(79,70,229,0.3); color: var(--indigo-light); }
+.chip-pink { background: rgba(236,72,153,0.12); border-color: rgba(236,72,153,0.3); color: var(--pink-light); }
+.chip-cyan { background: rgba(6,182,212,0.12); border-color: rgba(6,182,212,0.3); color: var(--cyan-light); }
+.chip-amber { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.3); color: var(--amber-light); }
+
+/* EXPERIENCE TIMELINE */
+.timeline { position: relative; padding-left: 2rem; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--indigo), var(--pink), var(--cyan), transparent);
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 3rem;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.6s, transform 0.6s;
+}
+.timeline-item.visible { opacity: 1; transform: translateX(0); }
+.timeline-dot {
+  position: absolute;
+  left: -2.45rem;
+  top: 0.4rem;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid;
+  background: var(--bg);
+}
+.dot-indigo { border-color: var(--indigo-light); box-shadow: 0 0 12px var(--indigo); }
+.dot-pink { border-color: var(--pink); box-shadow: 0 0 12px var(--pink); }
+.dot-cyan { border-color: var(--cyan); box-shadow: 0 0 12px var(--cyan); }
+.timeline-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.75rem;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+.timeline-card:hover {
+  border-color: rgba(79,70,229,0.3);
+  box-shadow: 0 8px 40px rgba(79,70,229,0.15);
+  transform: translateX(4px);
+}
+.tl-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+.tl-role {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.tl-badge {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 100px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.badge-current { background: rgba(6,182,212,0.15); color: var(--cyan); border: 1px solid rgba(6,182,212,0.3); }
+.badge-prev { background: rgba(79,70,229,0.15); color: var(--indigo-light); border: 1px solid rgba(79,70,229,0.3); }
+.badge-intern { background: rgba(245,158,11,0.15); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+.tl-company { font-size: 0.9rem; color: var(--indigo-light); font-weight: 500; margin-bottom: 0.25rem; }
+.tl-meta { font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; }
+.tl-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.tl-bullets li {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.6;
+  padding-left: 1.25rem;
+  position: relative;
+}
+.tl-bullets li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: var(--pink);
+  font-weight: 700;
+}
+
+/* PROJECTS / ACHIEVEMENTS */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.project-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.75rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s, transform 0.5s, border-color 0.3s, box-shadow 0.3s;
+}
+.project-card.visible { opacity: 1; transform: translateY(0); }
+.project-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(79,70,229,0.08), rgba(236,72,153,0.08));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.project-card:hover::before { opacity: 1; }
+.project-card:hover {
+  border-color: rgba(236,72,153,0.3);
+  box-shadow: 0 12px 40px rgba(236,72,153,0.1);
+  transform: translateY(-4px);
+}
+.project-emoji { font-size: 2rem; margin-bottom: 1rem; display: block; }
+.project-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+.project-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
+.project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.project-tag {
+  font-size: 0.72rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.06);
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* EDUCATION */
+.edu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+.edu-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem;
+  transition: all 0.3s;
+  opacity: 0;
+  transform: translateY(16px);
+}
+.edu-card.visible { opacity: 1; transform: translateY(0); }
+.edu-card:hover { border-color: rgba(6,182,212,0.3); box-shadow: 0 8px 30px rgba(6,182,212,0.1); }
+.edu-year {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+.edu-degree {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+.edu-school { font-size: 0.85rem; color: var(--muted); }
+
+/* CERTIFICATIONS */
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.cert-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.3s;
+}
+.cert-card:hover { border-color: rgba(245,158,11,0.3); box-shadow: 0 6px 24px rgba(245,158,11,0.1); }
+.cert-icon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+.cert-icon-amber { background: rgba(245,158,11,0.15); }
+.cert-icon-indigo { background: rgba(79,70,229,0.15); }
+.cert-title { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+.cert-issuer { font-size: 0.75rem; color: var(--muted); }
+
+/* LANGUAGES */
+.lang-badges { display: flex; gap: 1rem; flex-wrap: wrap; }
+.lang-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.25rem 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  min-width: 120px;
+  transition: all 0.3s;
+}
+.lang-badge:hover { border-color: rgba(79,70,229,0.4); transform: translateY(-3px); }
+.lang-flag { font-size: 1.75rem; }
+.lang-name { font-family: var(--font-display); font-size: 0.85rem; font-weight: 700; color: var(--text); }
+.lang-level { font-size: 0.7rem; color: var(--muted); }
+
+/* CONTACT */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+.contact-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.contact-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.03));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.contact-card:hover::after { opacity: 1; }
+.contact-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+.contact-card:hover .contact-icon { transform: scale(1.1); }
+.contact-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+  position: relative;
+  z-index: 1;
+}
+.ripple-avatar {
+  position: relative;
+}
+.ripple-avatar::before,
+.ripple-avatar::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid;
+  animation: ripple 2s linear infinite;
+}
+.ripple-avatar::after { animation-delay: 1s; }
+@keyframes ripple {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+.contact-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; }
+.contact-value { font-size: 0.9rem; color: var(--text); font-weight: 500; }
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.8rem;
+  position: relative;
+  z-index: 1;
+}
+footer span { color: var(--pink); }
+
+/* REVEAL ANIMATION */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s, transform 0.6s;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero-layout { grid-template-columns: 1fr; }
+  .floating-card { display: none; }
+  nav { padding: 0 1rem; }
+  .nav-links { display: none; }
+  section { padding: 4rem 1.25rem; }
+  .hero-name { letter-spacing: -1px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-initials">TT</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+  <div class="loader-text">Loading portfolio…</div>
+</div>
+
+<!-- CUSTOM CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- PARTICLE CANVAS -->
+<canvas id="particle-canvas"></canvas>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-logo">Tripti Tripathi</div>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero" style="max-width:1100px;margin:0 auto;padding:6rem 2rem 4rem;">
+  <div class="hero-layout">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Compliance & Risk Management Professional</div>
+      <h1 class="hero-name">
+        <span class="shimmer-text">Tripti<br>Tripathi</span>
+      </h1>
+      <p class="hero-subtitle">
+        <span>Senior Product Compliance Associate</span> @ Amazon Web Services
+      </p>
+      <p class="hero-tagline">
+        Specializing in control environment assessment, regulatory risk governance, policy enforcement, and compliance excellence in high-scale cloud ecosystems.
+      </p>
+      <div class="hero-ctas">
+        <a href="#experience" class="btn-primary">View Experience</a>
+        <a href="#contact" class="btn-outline">Get In Touch</a>
+      </div>
+    </div>
+    <div class="floating-card" id="floatingCard">
+      <div class="card-title">At a Glance</div>
+      <div class="stat-row">
+        <div class="stat-item">
+          <div class="stat-num indigo">2.5<span style="font-size:1rem">yrs</span></div>
+          <div class="stat-label">at Amazon Web Services</div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="stat-item">
+          <div class="stat-num pink">95–100<span style="font-size:1rem">%</span></div>
+          <div class="stat-label">CSAT Score maintained</div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="stat-item">
+          <div class="stat-num cyan">3×</div>
+          <div class="stat-label">Awesome Award winner</div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="stat-item">
+          <div class="stat-num amber">0</div>
+          <div class="stat-label">Policy breaches</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header reveal">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Skills & Expertise</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid reveal">
+    <div>
+      <div class="skill-item">
+        <div class="skill-top"><span class="skill-name">Regulatory Compliance</span><span class="skill-pct">92%</span></div>
+        <div class="skill-track"><div class="skill-bar bar-indigo" data-width="92"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-top"><span class="skill-name">Risk Assessment & Gap Analysis</span><span class="skill-pct">88%</span></div>
+        <div class="skill-track"><div class="skill-bar bar-pink" data-width="88"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-top"><span class="skill-name">Control Environment Assessment</span><span class="skill-pct">85%</span></div>
+        <div class="skill-track"><div class="skill-bar bar-cyan" data-width="85"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-top"><span class="skill-name">Policy Enforcement & Governance</span><span class="skill-pct">90%</span></div>
+        <div class="skill-track"><div class="skill-bar bar-amber" data-width="90"></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="skill-item">
+        <div class="skill-top"><span class="skill-name">Audit Trail Management</span><span class="skill-pct">87%</span></div>
+        <div class="skill-track"><div class="skill-bar bar-indigo" data-width="87"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-top"><span class="skill-name">Cross-functional Collaboration</span><span class="skill-pct">91%</span></div>
+        <div class="skill-track"><div class="skill-bar bar-pink" data-width="91"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-top"><span class="skill-name">Escalation Management</span><span class="skill-pct">89%</span></div>
+        <div class="skill-track"><div class="skill-bar bar-cyan" data-width="89"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-top"><span class="skill-name">AWS Cloud Services</span><span class="skill-pct">80%</span></div>
+        <div class="skill-track"><div class="skill-bar bar-amber" data-width="80"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="chips-section reveal">
+    <div class="chips-label">Compliance & Risk</div>
+    <div class="chips">
+      <span class="chip chip-indigo">Operational Risk Mgmt</span>
+      <span class="chip chip-indigo">IT Risk Management</span>
+      <span class="chip chip-indigo">Compliance Gap Analysis</span>
+      <span class="chip chip-indigo">Control Design</span>
+      <span class="chip chip-indigo">Corrective Action Planning</span>
+      <span class="chip chip-indigo">SEBI Regulations</span>
+    </div>
+  </div>
+  <div class="chips-section reveal" style="margin-top:1rem">
+    <div class="chips-label">Testing & Documentation</div>
+    <div class="chips">
+      <span class="chip chip-pink">Compliance Testing</span>
+      <span class="chip chip-pink">Policy Adjudication</span>
+      <span class="chip chip-pink">SLA Adherence</span>
+      <span class="chip chip-pink">Root Cause Analysis</span>
+      <span class="chip chip-pink">Remediation Planning</span>
+    </div>
+  </div>
+  <div class="chips-section reveal" style="margin-top:1rem">
+    <div class="chips-label">Tools</div>
+    <div class="chips">
+      <span class="chip chip-cyan">AWS Billing Console</span>
+      <span class="chip chip-cyan">Cost Explorer</span>
+      <span class="chip chip-cyan">CRM Systems</span>
+      <span class="chip chip-amber">MS Excel</span>
+      <span class="chip chip-amber">MS PowerPoint</span>
+      <span class="chip chip-amber">Tally</span>
+      <span class="chip chip-amber">MIS</span>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header reveal">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Work Experience</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot dot-cyan"></div>
+      <div class="timeline-card">
+        <div class="tl-header">
+          <div class="tl-role">Senior Product Compliance Associate</div>
+          <span class="tl-badge badge-current">Current</span>
+        </div>
+        <div class="tl-company">Amazon Web Services (AWS)</div>
+        <div class="tl-meta">📍 Bengaluru, Karnataka · Nov 2025 – Present</div>
+        <ul class="tl-bullets">
+          <li>Assess the control environment across product lines to verify controls are properly designed and implemented, identifying gaps and determining control effectiveness.</li>
+          <li>Execute compliance reviews and risk assessments with precision and accountability, ensuring all activities are completed accurately and within defined timelines.</li>
+          <li>Identify control deficiencies and compliance gaps, driving corrective action plans and remediation efforts to mitigate operational and regulatory risk.</li>
+          <li>Utilize analytical thinking to systematically organize, evaluate, and compare compliance data — identifying key risk indicators and underlying control weaknesses.</li>
+          <li>Collaborate with cross-functional teams including legal, policy, and operations to align compliance efforts and communicate outcomes to stakeholders.</li>
+          <li>Maintain meticulous compliance documentation, audit trails, and control governance records to support internal reviews and regulatory reporting obligations.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot dot-indigo"></div>
+      <div class="timeline-card">
+        <div class="tl-header">
+          <div class="tl-role">Technical Customer Support Associate (L3)</div>
+          <span class="tl-badge badge-prev">AWS</span>
+        </div>
+        <div class="tl-company">Amazon Web Services (AWS)</div>
+        <div class="tl-meta">📍 Bengaluru, Karnataka · Nov 2023 – Sep 2025</div>
+        <ul class="tl-bullets">
+          <li>Executed structured review and adjudication of complex AWS account, billing, and service cases — ensuring all outcomes adhered to policy controls and compliance protocols.</li>
+          <li>Assessed control environments by identifying policy non-adherence patterns and usage anomalies, escalating control deficiencies through governance channels.</li>
+          <li>Applied analytical thinking to systematically evaluate case data, compare against compliance benchmarks, and identify key risk indicators requiring remediation.</li>
+          <li>Maintained rigorous audit-ready documentation of all case interactions, control assessments, and policy applications.</li>
+          <li>Resolved 10–15 high-priority escalated cases monthly with zero policy breach, consistently maintaining CSAT of 95–100%.</li>
+          <li>3× Awesome Award winner — recognized for compliance excellence, control accuracy, and outstanding operational delivery.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot dot-pink"></div>
+      <div class="timeline-card">
+        <div class="tl-header">
+          <div class="tl-role">Internship Trainee</div>
+          <span class="tl-badge badge-intern">Internship</span>
+        </div>
+        <div class="tl-company">Baroda BNP Paribas Mutual Fund</div>
+        <div class="tl-meta">📍 Varanasi, Uttar Pradesh · Jul 2021 – Mar 2022</div>
+        <ul class="tl-bullets">
+          <li>Supported assessment of operational compliance controls within a SEBI-regulated mutual fund environment, ensuring processes adhered to regulatory requirements and internal policies.</li>
+          <li>Identified and flagged process deviations and control gaps in financial operations, escalating findings for review and contributing to remediation documentation.</li>
+          <li>Maintained accurate financial records and compliance documentation to support audit readiness, regulatory reporting, and control governance obligations.</li>
+          <li>Contributed to development of compliance training manuals and internal SOPs, strengthening the overall control environment.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="section-header reveal">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Key Achievements</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card">
+      <span class="project-emoji">🏆</span>
+      <div class="project-title">3× Awesome Award</div>
+      <div class="project-desc">Recognized three times at Amazon Web Services for compliance excellence, control accuracy, and outstanding operational delivery.</div>
+      <div class="project-tags">
+        <span class="project-tag">AWS Recognition</span>
+        <span class="project-tag">Excellence Award</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <span class="project-emoji">🎯</span>
+      <div class="project-title">Zero Policy Breach Record</div>
+      <div class="project-desc">Maintained zero policy breach across 10–15 high-priority escalated case resolutions per month — demonstrating precision and accountability in compliance reviews.</div>
+      <div class="project-tags">
+        <span class="project-tag">Risk Management</span>
+        <span class="project-tag">Compliance</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <span class="project-emoji">📈</span>
+      <div class="project-title">95–100% CSAT Score</div>
+      <div class="project-desc">Consistently maintained exceptional customer satisfaction scores throughout tenure as L3 Technical Support Associate at AWS.</div>
+      <div class="project-tags">
+        <span class="project-tag">Customer Excellence</span>
+        <span class="project-tag">SLA Adherence</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <span class="project-emoji">🚀</span>
+      <div class="project-title">Promoted to Compliance Role</div>
+      <div class="project-desc">Promoted from Technical Support Associate (L3) to Senior Product Compliance Associate at AWS — reflecting demonstrated expertise in control assessment and risk governance.</div>
+      <div class="project-tags">
+        <span class="project-tag">Career Growth</span>
+        <span class="project-tag">AWS</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <span class="project-emoji">📋</span>
+      <div class="project-title">Audit-Ready Documentation</div>
+      <div class="project-desc">Built and maintained audit-ready compliance documentation standards, contributing to streamlined internal reviews and regulatory reporting.</div>
+      <div class="project-tags">
+        <span class="project-tag">Governance</span>
+        <span class="project-tag">Documentation</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <span class="project-emoji">👥</span>
+      <div class="project-title">Compliance Mentorship</div>
+      <div class="project-desc">Mentored associates on compliance-first practices, policy interpretation, and governance frameworks — improving team adherence and reducing misapplication.</div>
+      <div class="project-tags">
+        <span class="project-tag">Mentorship</span>
+        <span class="project-tag">Team Enablement</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-header reveal">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Education</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="edu-grid">
+    <div class="edu-card">
+      <div class="edu-year">2020 – 2023</div>
+      <div class="edu-degree">B.Voc. in Office Management</div>
+      <div class="edu-school">Banaras Hindu University, Varanasi</div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-year">2019 – 2020</div>
+      <div class="edu-degree">Intermediate — Science</div>
+      <div class="edu-school">National Institute of Open Schooling (NIOS), Varanasi</div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-year">2015 – 2016</div>
+      <div class="edu-degree">Secondary School Certificate</div>
+      <div class="edu-school">D.A.V. Sr. Sec. HZL Dariba School, Varanasi</div>
+    </div>
+  </div>
+
+  <div class="cert-grid reveal">
+    <div class="cert-card">
+      <div class="cert-icon cert-icon-amber">☁️</div>
+      <div>
+        <div class="cert-title">AWS Certified Cloud Practitioner</div>
+        <div class="cert-issuer">Amazon Web Services · 2025</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon cert-icon-indigo">🎓</div>
+      <div>
+        <div class="cert-title">Entrepreneurship & Personality Development</div>
+        <div class="cert-issuer">Institute of Management, BHU · 2022</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 3rem" class="reveal">
+    <div class="section-header" style="margin-bottom:1.5rem">
+      <span class="section-num">05</span>
+      <h2 class="section-title" style="font-size:1.4rem">Languages</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="lang-badges">
+      <div class="lang-badge">
+        <span class="lang-flag">🇮🇳</span>
+        <span class="lang-name">Hindi</span>
+        <span class="lang-level">Native</span>
+      </div>
+      <div class="lang-badge">
+        <span class="lang-flag">🇬🇧</span>
+        <span class="lang-name">English</span>
+        <span class="lang-level">Professional</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header reveal">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Get In Touch</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="contact-grid reveal">
+    <a href="mailto:ttripti393@gmail.com" class="contact-card">
+      <div class="contact-icon ripple-avatar" style="background:rgba(79,70,229,0.15);border-radius:50%;border:1px solid rgba(79,70,229,0.3)">📧</div>
+      <div>
+        <div class="contact-label">Email</div>
+        <div class="contact-value">ttripti393@gmail.com</div>
+      </div>
+    </a>
+    <a href="tel:+917905032725" class="contact-card">
+      <div class="contact-icon" style="background:rgba(6,182,212,0.15);border-radius:12px">📱</div>
+      <div>
+        <div class="contact-label">Phone</div>
+        <div class="contact-value">+91 7905032725</div>
+      </div>
+    </a>
+    <a href="https://www.linkedin.com/in/tripti-tripathi-5a35a4282" target="_blank" class="contact-card">
+      <div class="contact-icon" style="background:rgba(245,158,11,0.15);border-radius:12px">💼</div>
+      <div>
+        <div class="contact-label">LinkedIn</div>
+        <div class="contact-value">tripti-tripathi</div>
+      </div>
+    </a>
+    <div class="contact-card">
+      <div class="contact-icon" style="background:rgba(236,72,153,0.15);border-radius:12px">📍</div>
+      <div>
+        <div class="contact-label">Location</div>
+        <div class="contact-value">Bengaluru, Karnataka</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Designed & built for <span>Tripti Tripathi</span> · Compliance & Risk Management Professional · Bengaluru, India</p>
+</footer>
+
+<script>
+// ── LOADER ──
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 2000);
+});
+
+// ── CUSTOM CURSOR ──
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+function animateRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button, .project-card, .timeline-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '16px';
+    cursor.style.height = '16px';
+    cursor.style.background = 'var(--pink)';
+    ring.style.width = '50px';
+    ring.style.height = '50px';
+    ring.style.borderColor = 'rgba(236,72,153,0.5)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '10px';
+    cursor.style.height = '10px';
+    cursor.style.background = 'var(--cyan)';
+    ring.style.width = '36px';
+    ring.style.height = '36px';
+    ring.style.borderColor = 'rgba(6,182,212,0.5)';
+  });
+});
+
+// ── PARTICLES ──
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const COLORS = ['rgba(79,70,229,', 'rgba(236,72,153,', 'rgba(6,182,212,', 'rgba(245,158,11,'];
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = (Math.random() - 0.5) * 0.4;
+    this.r = Math.random() * 2 + 1;
+    this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    this.alpha = Math.random() * 0.5 + 0.2;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = this.color + this.alpha + ')';
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+function drawLines() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if (d < 130) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(79,70,229,${0.08 * (1 - d/130)})`;
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animParticles() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawLines();
+  requestAnimationFrame(animParticles);
+}
+animParticles();
+
+// ── 3D CARD TILT ──
+const card = document.getElementById('floatingCard');
+if (card) {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    card.style.transform = `rotateY(${x * 15}deg) rotateX(${-y * 15}deg) translateY(0px)`;
+    card.style.animation = 'none';
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.animation = 'float 6s ease-in-out infinite';
+  });
+}
+
+// ── SCROLL REVEAL ──
+const revealEls = document.querySelectorAll('.reveal, .timeline-item, .project-card, .edu-card');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+revealEls.forEach(el => observer.observe(el));
+
+// Stagger project cards
+document.querySelectorAll('.project-card').forEach((card, i) => {
+  card.style.transitionDelay = (i * 0.08) + 's';
+});
+document.querySelectorAll('.edu-card').forEach((card, i) => {
+  card.style.transitionDelay = (i * 0.1) + 's';
+});
+
+// ── SKILL BARS ──
+const barObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.skill-bar').forEach(bar => {
+        const w = bar.dataset.width;
+        setTimeout(() => { bar.style.width = w + '%'; }, 200);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.skills-grid').forEach(g => barObserver.observe(g));
+</script>
+</body>
+</html>
