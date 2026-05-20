@@ -1417,8 +1417,7 @@ if (card) {
 
 // ── PROFILE PHOTO ──
 // To add Tripti's photo: upload it to GitHub repo and replace the src below
-// e.g. document.getElementById('profile-photo').src = 'photo.jpg';
-const photoEl = document.getElementById('profile-photo');
+document.getElementById('profile-photo').src = 'photo.jpg';const photoEl = document.getElementById('profile-photo');
 const fallbackEl = document.getElementById('avatar-fallback');
 if (photoEl && photoEl.src && photoEl.src !== window.location.href) {
   photoEl.style.display = 'block';
