@@ -326,12 +326,107 @@ section {
   opacity: 0;
   min-width: 260px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+  position: relative;
+  z-index: 10;
+  pointer-events: all;
 }
 @keyframes float {
   0%, 100% { transform: translateY(0px) rotate3d(1,1,0,2deg); }
   50% { transform: translateY(-16px) rotate3d(1,1,0,-2deg); }
 }
 @keyframes fadeIn { to { opacity: 1; } }
+
+/* PHOTO AVATAR */
+.avatar-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+.avatar-ring {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(135deg, var(--indigo-light), var(--pink), var(--cyan));
+  animation: avatarPulse 3s ease-in-out infinite;
+  box-shadow: 0 0 30px rgba(124,58,237,0.4);
+}
+.avatar-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.avatar-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.avatar-initials {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--indigo-light), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+@keyframes avatarPulse {
+  0%, 100% { box-shadow: 0 0 30px rgba(124,58,237,0.4); }
+  50% { box-shadow: 0 0 50px rgba(236,72,153,0.5); }
+}
+
+/* ABOUT SECTION */
+.about-section {
+  max-width: 860px;
+  margin: 0 auto 5rem;
+  padding: 0 2rem;
+}
+.about-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2.5rem;
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+@media (max-width: 640px) {
+  .about-card { grid-template-columns: 1fr; text-align: center; }
+  .avatar-wrap { justify-content: center; }
+}
+.about-text h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--indigo-light);
+  margin-bottom: 0.75rem;
+}
+.about-text p {
+  color: var(--muted);
+  line-height: 1.75;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+.about-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+.about-fact {
+  background: rgba(124,58,237,0.1);
+  border: 1px solid rgba(124,58,237,0.2);
+  border-radius: 20px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.8rem;
+  color: var(--indigo-light);
+}
 .card-title {
   font-family: var(--font-display);
   font-size: 0.7rem;
@@ -771,6 +866,7 @@ footer span { color: var(--pink); }
   <div class="nav-logo">Tripti Tripathi</div>
   <ul class="nav-links">
     <li><a href="#hero">Home</a></li>
+    <li><a href="#about">About</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#achievements">Achievements</a></li>
@@ -802,8 +898,8 @@ footer span { color: var(--pink); }
       <div class="card-title">At a Glance</div>
       <div class="stat-row">
         <div class="stat-item">
-          <div class="stat-num indigo">2.5<span style="font-size:1rem">yrs</span></div>
-          <div class="stat-label">at Amazon Development Center</div>
+          <div class="stat-num indigo">3+<span style="font-size:1rem">yrs</span></div>
+          <div class="stat-label">Combined professional experience</div>
         </div>
         <div class="card-divider"></div>
         <div class="stat-item">
@@ -820,6 +916,44 @@ footer span { color: var(--pink); }
           <div class="stat-num amber">0</div>
           <div class="stat-label">Policy breaches</div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT ME -->
+<section id="about" style="max-width:860px;margin:0 auto 1rem;padding:0 2rem;">
+  <div class="section-header reveal">
+    <span class="section-num">00</span>
+    <h2 class="section-title">About Me</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-card reveal">
+    <div>
+      <div class="avatar-wrap">
+        <div class="avatar-ring">
+          <div class="avatar-inner">
+            <!-- Replace src below with Tripti's actual photo URL or base64 -->
+            <img id="profile-photo" src="" alt="Tripti Tripathi"
+              onerror="this.style.display='none';document.getElementById('avatar-fallback').style.display='flex';"
+              style="display:none;">
+            <div id="avatar-fallback" class="avatar-initials" style="display:flex;">TT</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="about-text">
+      <h3>Hi, I'm Tripti 👋</h3>
+      <p>I'm a Compliance & Risk Management professional based in Bengaluru, with 3+ years of experience helping organizations maintain strong control environments, navigate regulatory requirements, and protect customers through rigorous compliance governance.</p>
+      <p>I've built my career at Amazon — starting as a Technical Customer Support Associate (L3) at AWS and growing into a Senior Product Compliance Associate at Amazon Development Center — where I specialize in KYC/AML compliance, control environment assessment, risk identification, and cross-functional stakeholder management.</p>
+      <p>I hold the <strong style="color:var(--cyan)">AWS Certified Cloud Practitioner</strong> certification and bring direct financial services exposure through my internship at <strong style="color:var(--pink)">Baroda BNP Paribas Mutual Fund</strong>, a BNP Paribas Group entity.</p>
+      <div class="about-facts">
+        <span class="about-fact">📍 Bengaluru, India</span>
+        <span class="about-fact">🎓 B.Voc., BHU Varanasi</span>
+        <span class="about-fact">☁️ AWS Certified</span>
+        <span class="about-fact">🏦 FinCrime & KYC/AML</span>
+        <span class="about-fact">🔒 Zero Policy Breach</span>
+        <span class="about-fact">🌐 Open to Opportunities</span>
       </div>
     </div>
   </div>
@@ -921,7 +1055,7 @@ footer span { color: var(--pink); }
           <span class="tl-badge badge-current">Current</span>
         </div>
         <div class="tl-company">Amazon Development Center (India) Pvt. Ltd.</div>
-        <div class="tl-meta">📍 Bengaluru, Karnataka · Nov 2025 – Present</div>
+        <div class="tl-meta">📍 Bengaluru, Karnataka · Aug 2025 – Present</div>
         <ul class="tl-bullets">
           <li>Assess the control environment across product lines to verify controls are properly designed and implemented, identifying gaps and determining control effectiveness.</li>
           <li>Execute compliance reviews and risk assessments with precision and accountability, ensuring all activities are completed accurately and within defined timelines.</li>
@@ -940,7 +1074,7 @@ footer span { color: var(--pink); }
           <span class="tl-badge badge-prev">AWS</span>
         </div>
         <div class="tl-company">Amazon Web Services (AWS)</div>
-        <div class="tl-meta">📍 Bengaluru, Karnataka · Nov 2023 – Sep 2025</div>
+        <div class="tl-meta">📍 Bengaluru, Karnataka · Nov 2023 – Aug 2025</div>
         <ul class="tl-bullets">
           <li>Executed structured review and adjudication of complex AWS account, billing, and service cases — ensuring all outcomes adhered to policy controls and compliance protocols.</li>
           <li>Assessed control environments by identifying policy non-adherence patterns and usage anomalies, escalating control deficiencies through governance channels.</li>
@@ -1258,17 +1392,35 @@ animParticles();
 // ── 3D CARD TILT ──
 const card = document.getElementById('floatingCard');
 if (card) {
+  // Once fadeIn completes, lock opacity at 1 so hover never hides the card
+  setTimeout(() => { card.style.opacity = '1'; }, 2200);
+
   card.addEventListener('mousemove', e => {
     const r = card.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width - 0.5;
     const y = (e.clientY - r.top) / r.height - 0.5;
     card.style.transform = `rotateY(${x * 15}deg) rotateX(${-y * 15}deg) translateY(0px)`;
     card.style.animation = 'none';
+    card.style.opacity = '1';
   });
   card.addEventListener('mouseleave', () => {
     card.style.transform = '';
-    card.style.animation = 'float 6s ease-in-out infinite';
+    card.style.opacity = '1';
+    // Small delay before re-enabling float so snap-back is smooth
+    setTimeout(() => {
+      card.style.animation = 'float 6s ease-in-out infinite';
+    }, 150);
   });
+}
+
+// ── PROFILE PHOTO ──
+// To add Tripti's photo: upload it to GitHub repo and replace the src below
+// e.g. document.getElementById('profile-photo').src = 'photo.jpg';
+const photoEl = document.getElementById('profile-photo');
+const fallbackEl = document.getElementById('avatar-fallback');
+if (photoEl && photoEl.src && photoEl.src !== window.location.href) {
+  photoEl.style.display = 'block';
+  if (fallbackEl) fallbackEl.style.display = 'none';
 }
 
 // ── SCROLL REVEAL ──
